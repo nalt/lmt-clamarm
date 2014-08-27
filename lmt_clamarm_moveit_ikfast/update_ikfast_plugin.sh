@@ -1,0 +1,1 @@
+rosrun moveit_ikfast create_ikfast_moveit_plugin.py lmtclam arm lmt_clamarm_moveit_ikfast /home/nalt/code/ros_arm/lmt_clamarm_moveit_ikfast/src/lmtclam_arm_ikfast_solver.cpp

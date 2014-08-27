@@ -1,0 +1,6 @@
+<robot file="_gen_clam.dae">
+  <manipulator name="arm">
+    <base>arm_base_link</base>
+    <effector>gripper_roll_link</effector>
+  </manipulator>
+</robot>

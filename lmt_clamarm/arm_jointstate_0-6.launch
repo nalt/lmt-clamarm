@@ -1,0 +1,59 @@
+<launch>
+    <!-- doc Clamarm driver and model using 7 dynamixel servos. See ptu_keyboard to control. -->
+
+    <!--  Robot Model -->
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find lmt_clamarm)/model/clam.xacro'" />
+    <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
+        <param name="publish_frequency" type="double" value="50.1" />
+        <param name="tf_prefix" type="string" value="" />
+    </node>
+    <!--  Driver -->
+    <rosparam command="load" file="$(find lmt_clamarm)/dynamixel_joint_controllers.yaml" />
+
+    <remap from="/arm/state" to="/joint_states"/>
+    
+    <!-- start specified joint controllers -->
+    <node name="dynamixel_spawner_1" pkg="dynamixel_controllers" type="controller_spawner.py" launch-prefix=""
+          args="--manager=dxl_manager
+                --port=arm_port
+                --type=simple
+                controller0
+                controller1
+                controller2
+                controller3
+                controller4
+                controller5
+                controller6"
+          output="screen"/>
+          
+	<node name="dynamixel_spawner_2" pkg="dynamixel_controllers" type="controller_spawner.py"
+	  args="--manager=dxl_manager
+			--type=meta
+			arm
+			controller0
+			controller1
+            controller2
+            controller3
+            controller4
+            controller5
+            controller6"
+	  output="screen"/>
+          
+          
+	<node name="dynamixel_manager" pkg="dynamixel_controllers" type="controller_manager.py" required="true" output="screen">
+        <rosparam>
+            namespace: dxl_manager
+            serial_ports:
+                arm_port:
+                    port_name: "/dev/robot/ttyArm"
+                    baud_rate: 400000
+                    readback_echo: True
+                    min_motor_id: 10
+                    max_motor_id: 16
+                    update_rate: 50
+        </rosparam>
+    </node>
+    
+    <!-- Move to a default position -->
+    <node pkg="rostopic" type="rostopic" name="$(anon chatter)" args="pub --once /NONE/command sensor_msgs/JointState '{ name: ['joint0', 'joint1', 'joint2', 'joint3', 'joint4', 'joint5', 'joint6'], position: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], velocity: [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1], effort: [] }'" output="screen" />
+</launch>
