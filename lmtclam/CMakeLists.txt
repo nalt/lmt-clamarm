@@ -21,9 +21,6 @@ find_package(PythonLibs REQUIRED)
 
 include_directories(${PYTHON_INCLUDE_DIRS})
 include_directories(${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
-# HACK:
-include_directories(../lmt_clamarm_moveit_ikfast/src/)
-include_directories(../lmt_clamarm_moveit_ikfast/include/)
 
 link_directories(${catkin_LIBRARY_DIRS})
 # add_definitions(-std=gnu++0x)

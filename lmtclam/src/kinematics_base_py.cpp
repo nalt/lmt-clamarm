@@ -1,15 +1,17 @@
 #include <ros/ros.h>
+#include <pluginlib/class_loader.h>
 #include <moveit/kinematics_base/kinematics_base.h>
 #include <boost/python.hpp>
 #include <boost/python/stl_iterator.hpp>
 #include <string>
 #include <vector>
 
-#include "lmtclam_arm_ikfast_moveit_plugin.cpp"
 
-/*namespace ikfast_kinematics_plugin {
-    extern class IKFastKinematicsPlugin : kinematics::KinematicsBase;
-}*/
+/**
+ * \file        Python wrapper for IK/FK in kinematics::KinematicsBase
+ * \author      Nicolas Alt
+ * \date        2014-08-26
+ */
 
 namespace py = boost::python;
 
@@ -28,20 +30,40 @@ template<typename T> py::list to_py_list(const std::vector<T>& v) {
 	return l;  
 }
 
+// The plugin file defines PLUGINLIB_EXPORT_CLASS(ikfast_kinematics_plugin::IKFastKinematicsPlugin, ...
+// lmtclam_moveit_ikfast/package.xml exports the plugin in the name of moveit_core
+pluginlib::ClassLoader<kinematics::KinematicsBase> loader("moveit_core", "kinematics::KinematicsBase");
 
+/** \brief Helper class for methods in kinematics::KinematicsBase. These methods are exported to Python. */
 class kinematics_wrapper
 {
+    private:
+        boost::shared_ptr<kinematics::KinematicsBase> ik;
+
 	public:
-		kinematics_wrapper(std::string node_name) {
+		kinematics_wrapper(std::string node_name)
+        {
 			int c = 0;
 			ros::init(c, NULL, node_name);
-			ik = new ikfast_kinematics_plugin::IKFastKinematicsPlugin();
-			}
-		~kinematics_wrapper()  { delete ik; }
-		std::string greet() { return "123"; }
+
+            try {
+                ik = loader.createInstance("lmtclam_arm_kinematics/IKFastKinematicsPlugin");  
+            } catch(pluginlib::PluginlibException& ex) {
+                ROS_ERROR("The plugin failed to load. Error: %s", ex.what());
+            }
+            printf("ik:%x\n", (void*)ik.get());
+			//ik = new ikfast_kinematics_plugin::IKFastKinematicsPlugin();
+		}
+		~kinematics_wrapper()  {  }
+		std::string greet() { return "Hello world"; }
 		std::string getBaseFrame() { return ik->getBaseFrame(); }
 		bool initialize(std::string robot_description, std::string group_name, std::string base_name, std::string tip_name, double search_discretization) { 
-			return ik->initialize(robot_description, group_name, base_name, tip_name, search_discretization); }
+            if (!ik) {
+                ROS_ERROR("KinematicsBase object is NULL");
+                return false;
+            }	
+			return ik->initialize(robot_description, group_name, base_name, tip_name, search_discretization);
+        }
 
 		py::object getPositionFK(std::string link_name, py::list joint_angles)
 		{
@@ -88,9 +110,6 @@ class kinematics_wrapper
 			else
 				return py::object();
 		}
-
-		// ikfast_kinematics_plugin::IKFastKinematicsPlugin ik;
-		kinematics::KinematicsBase *ik;
 };
 
 // typedef kinematics::KinematicsBase KinematicsType;
@@ -108,6 +127,7 @@ class kinematics_wrapper
 
 typedef kinematics_wrapper KinematicsType;
 
+/** \brief Defiens the Python module */
 BOOST_PYTHON_MODULE(kinematics_py)
 {
     // Create the Python type object for our extension class and define __init__ function.
@@ -120,7 +140,5 @@ BOOST_PYTHON_MODULE(kinematics_py)
         .def("getBaseFrame", &KinematicsType::getBaseFrame)
         .def("getPositionFK", &KinematicsType::getPositionFK)
         .def("searchPositionIK", &KinematicsType::searchPositionIK)
-        //.def("invite", invite)  // Add invite() as a regular function to the module.
     ;
-    //def("invite", invite); // Even better, invite() can also be made a member of module!!!
 }
