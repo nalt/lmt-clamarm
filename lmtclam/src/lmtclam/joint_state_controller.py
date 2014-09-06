@@ -1,5 +1,10 @@
-# -*- coding: utf-8 -*-
-#
+## \file   Controller for multiple Dynamixel servos which listens to sensor_msgs/JointState messages
+#          Allows for position and velocity control.
+#          Topics: command [IN], state [OUT], is_moving [OUT]
+#  \date   2014-08-25
+#  \author Nicolas Alt; based on code by Antons Rebguns
+
+
 # Software License Agreement (BSD License)
 #
 # Copyright (c) 2010-2011, Antons Rebguns.
@@ -33,16 +38,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 from __future__ import division
-
-
-__author__ = 'Nicolas Alt, Antons Rebguns'
-__copyright__ = 'Copyright (c) 2010-2011 Antons Rebguns'
-
-__license__ = 'BSD'
-__maintainer__ = ''
-__email__ = 'anton@email.arizona.edu'
-
-
 from threading import Thread
 
 import roslib

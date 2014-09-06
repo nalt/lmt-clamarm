@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# Follow the measured torque of Dynamixels (does not work very well)
+# nalt, 2014-08-25
 
 PKG = "dynarm_driver"
 import roslib; roslib.load_manifest(PKG)

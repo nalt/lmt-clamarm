@@ -1,14 +1,16 @@
 <launch>
     <!-- doc Clamarm driver and model using 7 dynamixel servos. See ptu_keyboard to control. -->
 
+    <arg name="tool" default="pen" />
+
     <!--  Robot Model -->
-    <param name="robot_description" command="$(find xacro)/xacro.py '$(find lmt_clamarm)/model/clam.xacro'" />
+    <param name="robot_description" command="$(find xacro)/xacro.py '$(find lmtclam)/model/clam.xacro' tool:=$(arg tool)" />
     <node pkg="robot_state_publisher" type="state_publisher" name="robot_state_publisher">
         <param name="publish_frequency" type="double" value="50.1" />
         <param name="tf_prefix" type="string" value="" />
     </node>
     <!--  Driver -->
-    <rosparam command="load" file="$(find lmt_clamarm)/dynamixel_joint_controllers.yaml" />
+    <rosparam command="load" file="$(find lmtclam)/dynamixel_joint_controllers.yaml" />
 
     <remap from="/arm/state" to="/joint_states"/>
     

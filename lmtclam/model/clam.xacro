@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 
 <!-- Robot Description format of CLAM arm
-Dave Coleman - davetcoleman@gmail.com
-10/23/13
+Dave Coleman - davetcoleman@gmail.com, 10/23/13
 
 Nicolas Alt, 2014-08-21
 
@@ -45,7 +44,7 @@ http://www.ros.org/wiki/xacro
     <!-- visual>
       <origin xyz=" 0 0 -0.017"  rpy="${.5*M_PI} 0 ${.5*M_PI}"/>
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/tabletop_link.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/tabletop_link.STL" scale="${M_SCALE}" />
       </geometry>
       <material name="Brown" />
     </visual -->
@@ -53,7 +52,7 @@ http://www.ros.org/wiki/xacro
     <!-- collision>
       <origin xyz=" 0 0 -0.017"  rpy="${.5*M_PI} 0 ${.5*M_PI}"/>
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/tabletop_link_simple.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/tabletop_link_simple.STL" scale="${M_SCALE}" />
       </geometry>
       </collision> -->
 
@@ -75,7 +74,7 @@ http://www.ros.org/wiki/xacro
     <visual>
       <origin xyz="0 0 0" rpy="0 0 ${-M_PI/2}" oldrpy="${M_PI/2} 0 0" /> <!-- rotate PI/2 -->
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/base_link.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/base_link.STL" scale="${M_SCALE}" />
       </geometry>
       <material name="Grey" />
     </visual>
@@ -83,7 +82,7 @@ http://www.ros.org/wiki/xacro
     <collision>
       <origin xyz="0 0 0" rpy="0 0 ${-M_PI/2}" oldrpy="${M_PI/2} 0 0" /> <!-- rotate PI/2 -->
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/base_link_simple.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/base_link_simple.STL" scale="${M_SCALE}" />
       </geometry>
       </collision>>
 
@@ -114,7 +113,7 @@ http://www.ros.org/wiki/xacro
     <visual>
       <origin xyz="0 0 0" rpy="${M_PI/2} ${M_PI/2} 0" oldrpy="0 0 ${M_PI/2}" />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/shoulder_pan_link.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/shoulder_pan_link.STL" scale="${M_SCALE}" />
       </geometry>
       <material name="Orange" />
     </visual>
@@ -122,7 +121,7 @@ http://www.ros.org/wiki/xacro
     <collision>
       <origin xyz="0 0 0" rpy="${M_PI/2} ${M_PI/2} 0" oldrpy="0 0 ${M_PI/2}" />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/shoulder_pan_link_simple.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/shoulder_pan_link_simple.STL" scale="${M_SCALE}" />
       </geometry>
     </collision>
   </link>
@@ -153,7 +152,7 @@ http://www.ros.org/wiki/xacro
     <visual>
       <origin xyz="-0.002 0 -0.000" rpy="0 0 ${M_PI/2}" oldrpy="${M_PI/2} ${M_PI} ${M_PI/2}" />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/shoulder_pitch_link.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/shoulder_pitch_link.STL" scale="${M_SCALE}" />
       </geometry>
       <material name="Grey" />
     </visual>
@@ -161,7 +160,7 @@ http://www.ros.org/wiki/xacro
     <collision>
       <origin xyz="-0.002 0 -0.000" rpy="0 0 ${M_PI/2}" />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/shoulder_pitch_link_simple.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/shoulder_pitch_link_simple.STL" scale="${M_SCALE}" />
       </geometry>
     </collision>
 
@@ -192,7 +191,7 @@ http://www.ros.org/wiki/xacro
     <visual>
       <origin xyz="0.035 0.0 0.0" rpy="${M_PI/2} ${M_PI/2} ${M_PI}" oldrpy="${M_PI} ${M_PI/2} ${M_PI/2}" />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/elbow_roll_link.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/elbow_roll_link.STL" scale="${M_SCALE}" />
       </geometry>
       <material name="Black" />
     </visual>
@@ -200,7 +199,7 @@ http://www.ros.org/wiki/xacro
     <collision>
       <origin xyz="0.035 0.0 0.0" rpy="${M_PI/2} ${M_PI/2} ${M_PI}" />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/elbow_roll_link_simple.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/elbow_roll_link_simple.STL" scale="${M_SCALE}" />
       </geometry>
     </collision>
 
@@ -232,7 +231,7 @@ http://www.ros.org/wiki/xacro
     <visual>
       <origin xyz="0.0 0 0" rpy="${M_PI} 0 ${-M_PI/2} " oldrpy="${M_PI/2} 0 ${M_PI/2+M_PI}" />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/elbow_pitch_link.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/elbow_pitch_link.STL" scale="${M_SCALE}" />
       </geometry>
       <material name="Orange" />
     </visual>
@@ -240,7 +239,7 @@ http://www.ros.org/wiki/xacro
     <collision>
       <origin xyz="0.0 0 0" rpy="${M_PI} 0 ${-M_PI/2} " />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/elbow_pitch_link_simple.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/elbow_pitch_link_simple.STL" scale="${M_SCALE}" />
       </geometry>
     </collision>
 
@@ -272,7 +271,7 @@ http://www.ros.org/wiki/xacro
     <visual>
       <origin xyz="0 0 0" rpy="0 ${M_PI/2} ${M_PI/2}" />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/wrist_roll_link.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/wrist_roll_link.STL" scale="${M_SCALE}" />
       </geometry>
       <material name="Black" />
     </visual>
@@ -280,7 +279,7 @@ http://www.ros.org/wiki/xacro
     <collision>
       <origin xyz="0 0 0" rpy="0 ${M_PI/2} ${M_PI/2}" />
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/wrist_roll_link_simple.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/wrist_roll_link_simple.STL" scale="${M_SCALE}" />
       </geometry>
     </collision>
 

@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+# Keyboard joint controller
+# nalt, 2014-08-25
 
-PKG = "lmt_clamarm"
+PKG = "lmtclam"
 import roslib; roslib.load_manifest(PKG)
 import rospy
 
@@ -9,7 +11,7 @@ from sensor_msgs.msg import JointState
 import sys, select, termios, tty
 
 msg = """
-Reads from the keyboard and publishes to JointState message.
+Control joints with keyboard. Publishes to JointState message.
    1-7 / q-u:   Move 7 joints up / down
    + / -:       Change speed
    , / .:       Change stepping

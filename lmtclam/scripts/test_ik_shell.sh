@@ -1,5 +1,7 @@
 #!/bin/bash
-echo "Low-level test of IK Fast using the generated executable"
+echo "Low-level test of IK Fast using the generated IKFast executable"
+. $ROS_ROOT/../rosbash/rosbash
+roscd lmtclam
 
 # T=(0.3 0.1 0.1) # needs N=7
 T=(0.3 -0.1 0.3)
@@ -22,9 +24,10 @@ for free in $FREE_test ; do
 echo "free=$free, N=$N"
 
 # identity rotation
-J=`./fastik/ik_test 1 0 0  ${T[0]}  0 1 0  ${T[1]}  0 0 1  ${T[2]} $free  | sed -n $((N+1))p | sed -n 's/.*:\(.*\),/\1/p'`
+J=`./ikfast/ik_test 1 0 0  ${T[0]}  0 1 0  ${T[1]}  0 0 1  ${T[2]} $free  | sed -n $((N+1))p | sed -n 's/.*:\(.*\),/\1/p'`
 # Rotate gripper around its X-axis. R = 1 0 0 ; 0 0 -1 ; 0 1 0
-CMD="./fastik/ik_test 1 0 0  ${T[0]}  0 0 -1  ${T[1]}  0 1 0  ${T[2]} $free"
+CMD="./ikfast/ik_test 1 0 0  ${T[0]}  0 0 -1  ${T[1]}  0 1 0  ${T[2]} $free"
+echo $CMD
 J=`$CMD  | sed -n $((N+1))p | sed -n 's/.*:\(.*\),/\1/p'`
 echo "JOINTS: $J"
 

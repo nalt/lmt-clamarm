@@ -21,8 +21,8 @@ controller1:
     joint_speed: 0.3
     motor:
         id: 11
-        init: 1983 # decalibrated!
-        min: 809
+        init: 1983 # my servo is decalibrated; should be 2048!
+        min: 809 # decalibrated!
         max: 2800 # decalibrated!
         acceleration: 15
 
@@ -108,6 +108,6 @@ controller7:
 
 arm:
     controller:
-        package: lmt_clamarm
+        package: lmtclam
         module: joint_state_controller
         type: JointStateController

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(lmt_clamarm)
+project(lmtclam)
 
-set(MOVEIT_PLUGIN_PKG lmt_clamarm_moveit_ikfast)
+set(MOVEIT_PLUGIN_PKG lmtclam_moveit_ikfast)
 
 find_package(catkin REQUIRED COMPONENTS
   moveit_core

@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+# Copied from moveit_ikfast
 
 '''
 /*********************************************************************
@@ -48,10 +49,24 @@ def doRound(values,decimal_places):
     num_vector = shlex.split(values)
     new_vector = []
 
-    for i, num in enumerate(num_vector):
+    for num in num_vector:
         new_num = round(float(num),decimal_places)
+        print "Old:",num,"New:",new_num
+        new_vector.append(str(new_num))
+
+    new = " ".join(new_vector)
+    #print 'Original:', values, '  Updated: ', new
+
+    return new
+
+def doRoundRotatation(values,decimals_axis, decimals_angle):
+    num_vector = shlex.split(values)
+    new_vector = []
+
+    for i, num in enumerate(num_vector):
+        new_num = round(float(num),decimals_axis)
         if len(num_vector) == 4 and i == 3:
-            new_num = round(float(num),0)
+            new_num = round(float(num), decimals_angle)
         print "Old[%d]:"%(i), num,"New:",new_num
         new_vector.append(str(new_num))
 
@@ -70,15 +85,22 @@ if __name__ == '__main__':
         input_file = sys.argv[1]
         output_file = sys.argv[2]
         decimal_places = int(sys.argv[3])
-        decimal_places2 = int(sys.argv[4])
-        assert( len(sys.argv) < 6 )   # invalid num-arguments
+        if len(sys.argv) >= 5:
+            decimal_places_axis = int(sys.argv[4])
+        else:
+            decimal_places_axis = decimal_places
+        if len(sys.argv) >= 6:
+            decimal_places_angle = int(sys.argv[5])
+        else:
+            decimal_places_angle = decimal_places
+        assert( len(sys.argv) <= 6 )   # invalid num-arguments
     except:
-        print '\nUsage: round_collada_numbers.py <input_dae> <output_dae> <decimal places> <decimal places>'
-        print 'Rounds all the numbers to <decimal places> places\n'
+        print '\nUsage: round_collada_numbers.py <input_dae> <output_dae> <decimal places> [<decimal places axis> <decimal places angle>]'
+        print 'Rounds all the numbers to <decimal places> places.\nDifferent decimal places can be specified for angle-axis rotations.\n'
         sys.exit(-1)
 
     print '\nCollada Number Rounder'
-    print 'Rounding numbers to', decimal_places, ',', decimal_places2, ' decimal places\n'
+    print 'Rounding numbers to', decimal_places, 'decimal places (for roation axes:', decimal_places_axis, ', for angles:', decimal_places_angle, ')\n'
 
     # Read string from file
     f = open(input_file,'r')
@@ -102,7 +124,7 @@ if __name__ == '__main__':
     # find elements of particular name
     elements=dom.xpath('//ns:rotate',namespaces={'ns':namespace})
     for i in range(len(elements)):
-        elements[i].text = doRound(elements[i].text,decimal_places2)
+        elements[i].text = doRoundRotatation(elements[i].text, decimal_places_axis, decimal_places_angle)
 
     # find elements of particular name
     elements=dom.xpath('//ns:min',namespaces={'ns':namespace})

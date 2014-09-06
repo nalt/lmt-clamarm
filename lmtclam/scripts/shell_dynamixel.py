@@ -1,4 +1,8 @@
 #!/usr/bin/python
+## \file Creates a DynamixelIO object and starts an ipython shell. Allows for easy communication with Dynamixels.
+#  \date 2014-08-25
+#  \author (c) Nicolas Alt, TU Muenchen
+
 import IPython
 from dynamixel_driver import dynamixel_io
 from dynamixel_driver import dynamixel_const

@@ -1,4 +1,5 @@
 #!/bin/bash
+# Command arm in joint mode; uses rostopic pub.
 
 P1=1.57
 P2=0.5
