@@ -1,8 +1,8 @@
 <?xml version='1.0' encoding='ASCII'?>
 <package>
-  <name>lmt_clamarm_moveit_ikfast</name>
+  <name>lmtclam_moveit_ikfast</name>
   <version>0.0.0</version>
-  <description>The lmt_clamarm_moveit_ikfast package</description>
+  <description>The lmtclam_moveit_ikfast package</description>
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
@@ -36,7 +36,8 @@
     <!-- You can specify that this package is a metapackage here: -->
     <!-- <metapackage/> -->
     <!-- Other tools can request additional information be placed here -->
-    <moveit_core plugin="${prefix}/lmtclam_arm_moveit_ikfast_plugin_description.xml"/>
+    <moveit_core plugin="${prefix}/lmtclam_moveit_ikfast_plugin_description.xml"/>
+    <moveit_core plugin="${prefix}/lmtclam_moveit_ikfast_plugin_description.xml"/>
   </export>
   <build_depend>moveit_core</build_depend>
   <run_depend>moveit_core</run_depend>

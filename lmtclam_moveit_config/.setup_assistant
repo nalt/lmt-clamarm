@@ -1,8 +1,8 @@
 moveit_setup_assistant_config:
   URDF:
-    package: lmt_clamarm
-    relative_path: fastik/_gen_clam.urdf
+    package: lmtclam
+    relative_path: ikfast/_gen_clam.urdf
   SRDF:
     relative_path: config/lmtclam.srdf
   CONFIG:
-    generated_timestamp: 1408744509
+    generated_timestamp: 1410010538
