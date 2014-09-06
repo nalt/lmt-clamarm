@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot>
+  <joint name="tool_joint" type="fixed">
+    <origin xyz="0 -0.10 -0.015" rpy="0.2 0 0" />
+    <parent link="gripper_roll_link"/>
+    <child link="tool_link"/>
+  </joint>
+
+  <link name="tool_link">
+    <visual>
+      <origin xyz="0 0.07 0"  rpy="${M_PI/2} 0 0"/>
+      <geometry>
+        <cylinder radius="0.005" length="0.15" />
+      </geometry>
+      <material name="blue"><color rgba="0 1 1 1.0"/></material>
+    </visual>
+  </link>
+</robot>

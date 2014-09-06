@@ -16,8 +16,8 @@ http://www.ros.org/wiki/xacro
 -->
 <robot name="lmtclam" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <!-- Include materials -->
-  <xacro:include filename="$(find lmt_clamarm)/model/materials.urdf.xacro" />
+  <!-- Include URDFs -->
+  <xacro:include filename="$(find lmtclam)/model/materials.urdf.xacro" />
 
   <!-- Constants -->
   <property name="M_SCALE" value="0.001 0.001 0.001"/>
@@ -300,7 +300,6 @@ http://www.ros.org/wiki/xacro
 
   <!-- WRIST PITCH LINK -->
   <link name="wrist_pitch_link">
-
     <inertial>
       <origin xyz="0 0 0"  />
       <mass value="1.0" />
@@ -308,25 +307,32 @@ http://www.ros.org/wiki/xacro
     </inertial>
 
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" oldrpy="${M_PI} -${M_PI/2} 0" />
+      <origin xyz="0 0 ${0.0355/2}" rpy="${M_PI} ${M_PI} 0"/>
       <geometry>
-        <!-- Todo: Update Mesh with MX28 -->
-        <mesh filename="package://lmt_clamarm/model/stl/wrist_pitch_link.STL" scale="${M_SCALE}" />
+        <!-- Center of mesh: Axis of Dynamixel, on surface (not on horn) -->
+        <mesh filename="package://lmtclam/model/stl/MX28T.dae" scale="0.00000002555635319 0.00000002555635319 0.00000002555635319 "/>
       </geometry>
-      <material name="Grey" />
     </visual>
-
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" oldrpy="${M_PI} -${M_PI/2} 0" />
+    <visual>
+      <origin xyz="${0.0358 + 0.01 + 0.03275} 0 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
       <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/wrist_pitch_link_simple.STL" scale="${M_SCALE}" />
+        <mesh filename="package://lmtclam/model/stl/MX28T.dae" scale="0.00000002555635319 0.00000002555635319 0.00000002555635319 "/>
       </geometry>
+    </visual>
+    <collision>
+      <!-- 0.012: Distance from MX28 axis to edge; Dynamixel outer dimensions: 0.0506x0.0356x0.041 (LxWxH) -->
+      <origin xyz="${0.0506/2 - 0.012} 0 0" rpy="0 0 0"/>
+      <geometry><box size="0.0506 .0356 0.041"/></geometry>
+    </collision>
+    <collision>
+      <origin xyz="${0.0358 + 0.01 + 0.03275  - .0356/2}   -0.012 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
+      <geometry><box size="0.0506 .0356 0.041"/></geometry>
     </collision>
 
   </link>
 
   <gazebo reference="wrist_pitch_link">
-    <material>Gazebo/Grey</material>
+    <material>Gazebo/Black</material>
   </gazebo>
 
   <joint name="joint6" type="revolute">
@@ -342,231 +348,17 @@ http://www.ros.org/wiki/xacro
 
   <!-- GRIPPER ROLL LINK -->
   <link name="gripper_roll_link">
-
-    <inertial>
-      <origin xyz="0 0 0" />
-      <mass value="1.0" />
-      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
-    </inertial>
-
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/gripper_roll_link.STL" scale="${M_SCALE}" />
-      </geometry>
-      <material name="Orange" />
-    </visual>
-
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/gripper_roll_link.STL" scale="${M_SCALE}" />
-      </geometry>
-    </collision>
-
   </link>
 
   <gazebo reference="gripper_roll_link">
     <material>Gazebo/Orange</material>
   </gazebo>
 
-  <joint name="gripper_finger_joint" type="revolute">
-    <parent link="gripper_roll_link"/>
-    <child link="gripper_finger_link"/>
-    <origin xyz="0.026 .017 0" rpy="${1.04*M_PI} ${M_PI/2} ${34.58*M_PI/180}" />
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="1" lower="${-53*M_PI/180}" upper="${0*M_PI/180}"/>
-    <dynamics damping="50" friction="1"/>
-  </joint>
+  <!-- Include Tools -->
+  <xacro:include filename="$(find lmtclam)/model/tool_$(arg tool).xacro" />
 
-  <!-- LEFT GRIPPER AFT LINK -->
-  <link name="gripper_finger_link">
+ 
 
-    <inertial>
-      <origin xyz="0 0 0"  />
-      <mass value="1.0" />
-      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
-    </inertial>
-
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
-      <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/l_gripper_aft_link.STL" scale="1 1 1" />
-      </geometry>
-      <material name="Grey" />
-    </visual>
-
-  </link>
-
-  <gazebo reference="l_gripper_aft_link">
-    <material>Gazebo/Grey</material>
-  </gazebo>
-
-  <joint name="r_gripper_aft_joint" type="revolute">
-    <parent link="gripper_roll_link"/>
-    <child link="r_gripper_aft_link"/>
-    <origin xyz="0.026 -0.011  0" rpy="${1.345*M_PI} ${M_PI/2} ${34.58*M_PI/180}" />
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="1" lower="-3.14" upper="3.14" />
-    <mimic joint="gripper_finger_joint" multiplier="-1.0" offset="0.0" />
-    <dynamics damping="50" friction="1"/>
-  </joint>
-
-  <!-- RIGHT GRIPPER AFT LINK -->
-  <link name="r_gripper_aft_link">
-
-    <inertial>
-      <origin xyz="0 0 0"  />
-      <mass value="1.0" />
-      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
-    </inertial>
-
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
-      <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/r_gripper_aft_link.STL" scale="1 1 1" />
-      </geometry>
-      <material name="Grey" />
-    </visual>
-
-  </link>
-
-  <gazebo reference="r_gripper_aft_link">
-    <material>Gazebo/Grey</material>
-  </gazebo>
-
-  <joint name="l_gripper_fwd_joint" type="revolute">
-    <parent link="gripper_roll_link"/>
-    <child link="l_gripper_fwd_link"/>
-    <origin xyz="0.05 0.008 0.007" rpy="${M_PI*(1+.04)} ${M_PI/2} ${214.58*M_PI/180}" />
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="1" lower="0" upper="1.57" />
-    <mimic joint="gripper_finger_joint" multiplier="1.0" offset="0.0" />
-    <dynamics damping="50" friction="1"/>
-  </joint>
-
-  <!-- LEFT GRIPPER FWD LINK -->
-  <link name="l_gripper_fwd_link">
-
-    <inertial>
-      <origin xyz="0 0 0"  />
-      <mass value="1.0" />
-      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
-    </inertial>
-
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
-      <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/l_gripper_fwd_link.STL" scale="1 1 1" />
-      </geometry>
-      <material name="Grey" />
-    </visual>
-
-  </link>
-
-  <gazebo reference="l_gripper_fwd_link">
-    <material>Gazebo/Grey</material>
-  </gazebo>
-
-  <joint name="r_gripper_fwd_joint" type="revolute">
-    <parent link="gripper_roll_link"/>
-    <child link="r_gripper_fwd_link"/>
-    <origin xyz="0.05 -0.0014 0.007" rpy="${M_PI*(1-.04)} ${M_PI/2} ${145.42*M_PI/180}" />
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="1" lower="-1.57" upper="0" />
-    <mimic joint="gripper_finger_joint" multiplier="-1.0" offset="0.0" />
-    <dynamics damping="50" friction="1"/>
-  </joint>
-
-  <!-- RIGHT GRIPPER FWD LINK -->
-  <link name="r_gripper_fwd_link">
-
-    <inertial>
-      <origin xyz="0 0 0"  />
-      <mass value="1.0" />
-      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
-    </inertial>
-
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
-      <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/r_gripper_fwd_link.STL" scale="1 1 1" />
-      </geometry>
-      <material name="Grey" />
-    </visual>
-
-  </link>
-
-  <gazebo reference="r_gripper_fwd_link">
-    <material>Gazebo/Grey</material>
-  </gazebo>
-
-  <joint name="gripper_finger_pincher_joint" type="revolute">
-    <parent link="gripper_finger_link"/>
-    <child link="l_gripper_pincher_link"/>
-    <origin xyz="-0.0032 0 -0.0508" rpy="${203.27*M_PI/180-.3150*M_PI} 0 0" />
-    <axis xyz="1 0 0" />
-    <limit effort="300" velocity="1" lower="-1.57" upper="1.57" />
-    <mimic joint="gripper_finger_joint" multiplier="-1.0" offset="0.0" />
-    <dynamics damping="50" friction="1"/>
-  </joint>
-
-  <!-- LEFT GRIPPER PINCHER -->
-  <link name="l_gripper_pincher_link">
-
-    <inertial>
-      <origin xyz="0 0 0"  />
-      <mass value="1.0" />
-      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
-    </inertial>
-
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
-      <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/l_gripper_pincher.STL" scale="1 1 1" />
-      </geometry>
-      <material name="Black" />
-    </visual>
-
-  </link>
-
-  <gazebo reference="l_gripper_pincher_link">
-    <material>Gazebo/Black</material>
-  </gazebo>
-
-  <joint name="r_gripper_aft_pincher_joint" type="revolute">
-    <parent link="r_gripper_aft_link"/>
-    <child link="r_gripper_pincher_link"/>
-    <origin xyz="0 0 -0.0508" rpy="${23.27*M_PI/180-.3150*M_PI} ${M_PI} 0" />
-    <axis xyz="1 0 0" />
-
-    <limit effort="300" velocity="1" lower="0" upper="1.57" />
-    <mimic joint="gripper_finger_joint" multiplier="-1.0" offset="0.0" />
-    <dynamics damping="50" friction="1"/>
-  </joint>
-
-  <!-- RIGHT GRIPPER PINCHER -->
-  <link name="r_gripper_pincher_link">
-
-    <inertial>
-      <origin xyz="0 0 0" />
-      <mass value="1.0" />
-      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
-    </inertial>
-
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 ${M_PI}" />
-      <geometry>
-        <mesh filename="package://lmt_clamarm/model/stl/r_gripper_pincher.STL" scale="1 1 1" />
-      </geometry>
-      <material name="Black" />
-    </visual>
-
-  </link>
-
-  <gazebo reference="r_gripper_pincher_link">
-    <material>Gazebo/Black</material>
-  </gazebo>
 
   <!-- Transmissions for ROS Control -->
   <transmission name="tran1">
@@ -648,41 +440,5 @@ http://www.ros.org/wiki/xacro
     </plugin>
   </gazebo>
 
-
-
-  <!-- FAKE CAMERA CALIBRATION POINT AT GRIPPER TIP -->
-  <!--joint name="gripper_fake_tip_joint" type="fixed">
-    <origin xyz="0.1785 0.0 0.0" rpy="0 0 0" />
-    <parent link="gripper_roll_link"/>
-    <child link="gripper_fake_tip_link" />
-  </joint>
-
-  <link name="gripper_fake_tip_link" >
-
-    <inertial>
-      <origin xyz="0 0 0" />
-      <mass value="0.01" />
-      <inertia  ixx="1.0" ixy="0.0"  ixz="0.0"  iyy="100.0"  iyz="0.0"  izz="1.0" />
-    </inertial>
-
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <sphere radius=".001"/>
-      </geometry>
-    </visual>
-
-    <collision>
-      <origin xyz="-0.1 0 0" rpy="0 0 0" />
-      <geometry>
-        <sphere radius=".001"/>
-      </geometry>
-    </collision>
-
-  </link>
-
-  <gazebo reference="gripper_fake_tip_link">
-    <material>Gazebo/Grey</material>
-  </gazebo-->
 
 </robot>
